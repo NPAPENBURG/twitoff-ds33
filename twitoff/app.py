@@ -30,20 +30,29 @@ def create_app():
         DB.create_all()
         # Make some Users
         # create a user object from our .models class
-        ryan = User(id=1, username='ryanallred')
-        julian = User(id=2, username='julian')
+        papa = User(id=1, username='BigPapa3k')
+        buby = User(id=2, username='Buby')
         # add the user to the database
-        DB.session.add(ryan)
-        DB.session.add(julian)
+        DB.session.add(papa)
+        DB.session.add(buby)
         
         # Make some tweets
         # display our new user on the page
         # Make some tweets
-        tweet1 = Tweet(id=1, text='this is some tweet text', user=ryan)
-        tweet2 = Tweet(id=2, text='this is some other tweet text', user=julian)
+        tweet1 = Tweet(id=1, text='I am the goat', user=papa)
+        tweet2 = Tweet(id=2, text='Tenz get better', user=buby)
+        tweet3 = Tweet(id=3, text='Valorant is the best game', user=papa)
+        tweet4 = Tweet(id=4, text='Riot needs to close Valorant', user=buby)
+        tweet5 = Tweet(id=5, text='I am ranked #1 world wide', user=papa)
+        tweet6 = Tweet(id=6, text='I am ranked last', user=buby)
+
         # add the tweets to the DB Session
         DB.session.add(tweet1)
         DB.session.add(tweet2)
+        DB.session.add(tweet3)
+        DB.session.add(tweet4)
+        DB.session.add(tweet5)
+        DB.session.add(tweet6)
         
         # save the database
         DB.session.commit()
