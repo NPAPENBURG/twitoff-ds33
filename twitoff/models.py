@@ -1,34 +1,36 @@
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy 
 
-# Create a DB object
-# opening up the db connection
+# Create a DB Object
 DB = SQLAlchemy()
 
-# Create a table in the DB
-# Using Python Classes
-
+# Make a User table by creating a User class
 class User(DB.Model):
-    # for the different columns in our db. 
-    # Each one will be its on attribute on this Python Class
-    # ID Column Schema
-    id = DB.Column(DB.BigInteger, primary_key=True, nullable=False)
-    # username column Schema
+    '''Creates a User Table with SQLAlchemy'''
+    # id column
+    id = DB.Column(DB.BigInteger, primary_key=True)
+    # username column
     username = DB.Column(DB.String, nullable=False)
-    # the backref down below automatically adds a list of tweets here
-    # tweets = []
-    # newest tweet id column Schema
+    # keeps track of id for the newest tweet said by user
     newest_tweet_id = DB.Column(DB.BigInteger)
+    # We don't need a tweets attribute because this is 
+    # automatically being added by the backref in the Tweet model.
+    # tweets = DB.column(DB.String)
+    def __repr__(self):
+        return f'<User: {self.username}>'
 
+# Make a Tweet table by creating a Tweet class
 class Tweet(DB.Model):
-    # ID Column Schema
-    id = DB.Column(DB.BigInteger, primary_key=True, nullable=False)
-    # Text Column Schema
-    text = DB.Column(DB.Unicode(300), nullable=False)
-    # Word Embeddings (vect) Schema
-    # PickleType allows us to store a numpy array
-    vect = DB.Column(DB.PickleType, nullable=False)
-    # User Column Schema
+    '''Creates a Tweet Table with SQLAlchemy'''
+    # id column
+    id = DB.Column(DB.BigInteger, primary_key=True)
+    # text column
+    text = DB.Column(DB.Unicode(300)) # Unicode allows for both text and links and emojis, etc.
+    # Create a relationship between a tweet and a user
     user_id = DB.Column(DB.BigInteger, DB.ForeignKey('user.id'), nullable=False)
-    # Set up a relationship between tweets and IDs
-    # This will automatically add a new id to both the tweet and the user
-    user = DB.relationship('User', backref=DB.backref('tweets'), lazy=True)
+    # Finalizing the relationship making sure it goes both ways. 
+    user = DB.relationship('User', backref=DB.backref('tweets', lazy=True))
+    # be able to include a word embedding on a tweet
+    vect = DB.Column(DB.PickleType, nullable=False)
+
+    def __repr__(self):
+        return f'<Tweet: {self.text}>'
